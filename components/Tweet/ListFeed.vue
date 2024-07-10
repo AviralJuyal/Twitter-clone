@@ -8,13 +8,9 @@
       class="pb-4 border-b hover:bg-gray-100 cursor-pointer dark:hover:bg-dim-300 border-gray-300 dark:border-gray-700"
       :class="defaultTransition"
       v-for="tweet of props.tweets"
+      @click="() => handleNavigation(tweet.id)"
     >
-      <TweetItem :tweet="tweet" :key="tweet.id" />
-      <!-- {{ tweet.text }}
-        <div v-for="file of tweet.mediaFiles">
-          <img :src="file.url" class="w-[500px] h-[200px]" />
-        </div>
-      </li> -->
+      <TweetItem :tweet="tweet" :key="tweet.id" compact />
     </div>
   </div>
 </template>
@@ -30,4 +26,10 @@ const props = defineProps({
 });
 
 const isEmptyTweet = computed(() => props.tweets.length === 0);
+
+const handleNavigation = (id) => {
+  navigateTo({
+    path: "/status/" + id,
+  });
+};
 </script>

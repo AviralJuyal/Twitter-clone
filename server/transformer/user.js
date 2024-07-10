@@ -1,3 +1,5 @@
+import human from "human-time";
+
 export const userTransformer = (user) => {
   return {
     id: user.id,
@@ -6,5 +8,6 @@ export const userTransformer = (user) => {
     email: user.email,
     profileImage: user.profileImage,
     handle: "@" + user.username,
+    joinedAtHuman: human(user.createdAt),
   };
 };

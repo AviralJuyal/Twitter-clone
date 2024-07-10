@@ -20,6 +20,13 @@ export default () => {
     isLoading.value = value;
   };
 
+  // Validates email address
+  function validEmail(e) {
+    var filter =
+      /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+    return String(e).search(filter) != -1;
+  }
+
   const refreshToken = () => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -85,6 +92,10 @@ export default () => {
   };
 
   const login = ({ username, password }) => {
+    if (!password || !username) {
+      return alert("Please enter all the details");
+    }
+
     return new Promise(async (resolve, reject) => {
       try {
         const data = await $fetch("/api/auth/login", {
@@ -104,11 +115,61 @@ export default () => {
     });
   };
 
+  const signup = ({ username, password, email, name, repeatPassword }) => {
+    if (!password || !email || !name || !username || !repeatPassword) {
+      return alert("Please enter all the details");
+    }
+
+    if (!validEmail(email)) {
+      return alert("Please enter valid email");
+    }
+    if (password !== repeatPassword) {
+      return alert("Password does not match");
+    }
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await $fetch("/api/auth/register", {
+          method: "POST",
+          body: {
+            username,
+            password,
+            email,
+            name,
+            repeatPassword,
+          },
+        });
+        // console.log(data);
+        // setToken(data.accessToken);
+        // setUser(data.user);
+        resolve(true);
+        alert("Now you can login using this id");
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const getUserByUsername = (username) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await useFetchApi(`/api/auth/user/${username}`);
+
+        // setUser(data.user);
+        resolve(data.user);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
   return {
     useAuthUser,
     useAuthToken,
     login,
+    signup,
     initAuth,
     useAuthLoading,
+    getUserByUsername,
   };
 };

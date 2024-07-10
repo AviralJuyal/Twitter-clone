@@ -1,6 +1,6 @@
 <template>
   <nuxt-link
-    to="#"
+    :to="navigateUrl"
     class="flex p-3 w-min hover:bg-gray-200 rounded-full dark:hover:bg-dim-200 dark:text-white"
     :class="defaultTransition"
   >
@@ -21,6 +21,10 @@ const props = defineProps({
   active: {
     type: Boolean,
     default: false,
+  },
+  navigateUrl: {
+    type: String,
+    default: "#",
   },
 });
 

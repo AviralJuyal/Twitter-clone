@@ -199,7 +199,7 @@
 </template>
 
 <script setup>
-const { login } = useAuth();
+const { login, signup } = useAuth();
 const isLogin = ref(true);
 const formData = reactive({
   username: "",
@@ -215,7 +215,17 @@ const toggleForm = () => {
 };
 
 const handleSignup = () => {
-  alert(JSON.stringify(formData));
+  try {
+    signup({
+      username: formData.username,
+      password: formData.password,
+      email: formData.email,
+      repeatPassword: formData.repeatPassword,
+      name: formData.name,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const handleLogin = () => {
@@ -227,4 +237,3 @@ const handleLogin = () => {
   }
 };
 </script>
-<style scoped></style>

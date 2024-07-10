@@ -14,10 +14,11 @@
     </div>
 
     <div class="mt-2 space-y-3">
-      <SidebarLeftTab active>
+      <SidebarLeftTab :active="getActiveRoute('home')" navigateUrl="/home">
         <template v-slot:icon>
           <div class="w-8 h-8">
-            <HomeIcon />
+            <HomeActive v-if="getActiveRoute('home')" />
+            <HomeIcon v-else />
           </div>
         </template>
 
@@ -74,10 +75,14 @@
         <template v-slot:title> Lists </template>
       </SidebarLeftTab>
 
-      <SidebarLeftTab>
+      <SidebarLeftTab
+        :active="getActiveRoute('profile')"
+        :navigateUrl="`/profile/${user.username}`"
+      >
         <template v-slot:icon>
           <div class="w-8 h-8">
-            <UserIcon />
+            <UserActive v-if="getActiveRoute('profile')" />
+            <UserIcon v-else />
           </div>
         </template>
 
@@ -108,16 +113,48 @@
     </div>
     <button
       class="bg-blue-500 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none mt-4"
+      @click="openPostTweetModal"
     >
       Post
+    </button>
+    <!-- class="bg-dim-800 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none mt-4" -->
+
+    <button
+      v-if="darkMode"
+      @click="handleClick"
+      class="text-white border-[1px] rounded-2xl p-2 mt-2 flex items-center justify-center gap-2"
+    >
+      Light mode <IconSun />
+    </button>
+    <button
+      v-else
+      @click="handleClick"
+      class="text-black border-[1px] rounded-2xl p-2 mt-2 flex items-center justify-center gap-2"
+    >
+      Dark mode <IconMoon />
     </button>
   </div>
 </template>
 
 <script setup>
-import { HomeIcon } from "@heroicons/vue/24/solid";
+const handleClick = () => {
+  console.log("click");
+  emits("toggleMode");
+};
+const props = defineProps({
+  darkMode: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 import {
+  HomeIcon as HomeActive,
+  UserIcon as UserActive,
+} from "@heroicons/vue/24/solid";
+
+import {
+  HomeIcon,
   HashtagIcon,
   BellIcon,
   InboxIcon,
@@ -127,6 +164,21 @@ import {
 } from "@heroicons/vue/24/outline";
 
 const { defaultTransition } = useTailwindConfig();
-</script>
 
-<style scoped></style>
+const { openPostTweetModal } = useTweets();
+
+const { useAuthUser } = useAuth();
+const emits = defineEmits(["toggleMode"]);
+const user = useAuthUser();
+
+const getActiveRoute = (url) => {
+  return useRoute().fullPath.includes(url);
+};
+
+const toggleDisplay = () => {
+  emits("toggleMode");
+  console.log("Clicked to toggle");
+};
+
+// console.log(getActiveRoute("profile"));
+</script>

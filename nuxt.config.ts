@@ -19,6 +19,10 @@ export default defineNuxtConfig({
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
 
-  }
+  },
+  server: {
+    host: '0.0.0.0', // default: localhost
+    port: 3000,      // default: 3000
+  },
 
 })

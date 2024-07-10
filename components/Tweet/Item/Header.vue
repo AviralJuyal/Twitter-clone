@@ -8,7 +8,7 @@
         author.name
       }}</span>
       <span class="ml-3 text-sm font-medium text-gray-400">
-        <nuxt-link to="#">
+        <nuxt-link :to="`/profile/${author.username}`">
           {{ author.handle }}
         </nuxt-link>
         . {{ tweet.postedAtHuman }}
@@ -17,7 +17,7 @@
       <!-- If replying to anyone  -->
       <p v-if="tweet.replyTo" class="text-sm">
         <span class="text-gray-500"> Replying to </span>
-        <nuxt-link to="replyToTweetUrl" class="text-blue-400">
+        <nuxt-link :to="tweet.replyTo.id" class="text-blue-400">
           {{ tweet.replyTo.author.handle }}
         </nuxt-link>
       </p>

@@ -4,8 +4,11 @@
     <TweetItemHeader :tweet="tweet" />
 
     <!-- body  -->
-    <div class="ml-16">
-      <p class="flex-shrink font-medium text-gray-800 w-auto dark:text-white">
+    <div :class="tweetBodyWrapper">
+      <p
+        class="flex-shrink font-medium text-gray-800 w-auto dark:text-white"
+        :class="textSize"
+      >
         {{ tweet.text }}
       </p>
       <div
@@ -60,7 +63,14 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  compact: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const tweetBodyWrapper = computed(() => (props.compact ? "ml-16" : "ml-2"));
+const textSize = computed(() => (props.compact ? "text-base" : "text-2xl"));
 
 const generateRandomNumber = () => {
   return Math.floor(Math.random() * 100);

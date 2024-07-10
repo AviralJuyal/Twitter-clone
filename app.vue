@@ -14,7 +14,10 @@
           <!-- Left sidebar  -->
           <div class="hidden xs:block xs-col-span-1 xl:col-span-2">
             <div class="sticky top-0">
-              <SidebarLeft />
+              <SidebarLeft
+                :darkMode="darkMode"
+                @toggleMode="handleToggleMode"
+              />
             </div>
           </div>
 
@@ -33,6 +36,10 @@
       </div>
 
       <AuthPage v-else />
+
+      <UIModal :isOpen="postTweetModal" @closeModal="handleCloseModal">
+        <TweetForm @onSuccess="handleOnSuccess" />
+      </UIModal>
     </div>
   </div>
 </template>
@@ -41,11 +48,40 @@
 const darkMode = ref(false);
 
 const { useAuthUser, initAuth, useAuthLoading } = useAuth();
-const isLoading = useAuthLoading();
 const user = useAuthUser();
+
+const isLoading = useAuthLoading();
+
+const { closePostTweetModal, usePostTweetModal } = useTweets();
+
+const postTweetModal = usePostTweetModal();
+
 onBeforeMount(async () => {
   await initAuth();
+  console.log(user);
+  if (user) {
+    if (useRoute().fullPath === "/")
+      navigateTo({
+        path: "/home",
+      });
+  }
 });
+
+const handleToggleMode = (val) => {
+  darkMode.value = !darkMode.value;
+  console.log(val, "VALUE", darkMode.value);
+};
+
+const handleOnSuccess = (tweet) => {
+  navigateTo({
+    path: "/status/" + tweet.id,
+  });
+  closePostTweetModal();
+};
+
+const handleCloseModal = () => {
+  closePostTweetModal();
+};
 
 // console.log(user.value, "USER");
 </script>

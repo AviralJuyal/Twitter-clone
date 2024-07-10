@@ -3,10 +3,23 @@
     <IconSpinner />
   </div>
   <div v-else>
-    <TweetFormInput @onSubmit="handleSubmitForm" />
+    <TweetFormInput :placeholder="placeholder" @onSubmit="handleSubmitForm" />
   </div>
 </template>
 <script setup>
+const props = defineProps({
+  placeholder: {
+    type: String,
+    default: "What is happening?!",
+  },
+  replyTo: {
+    type: Object,
+    default: null,
+  },
+});
+
+const emits = defineEmits(["onSuccess"]);
+
 const { postTweet } = useTweets();
 
 const loading = ref(false);
@@ -16,8 +29,9 @@ const handleSubmitForm = async (data) => {
   //   alert(data.text);
   try {
     loading.value = true;
-    const res = await postTweet(data);
+    const res = await postTweet({ ...data, replyTo: props.replyTo?.id });
     console.log(res);
+    emits("onSuccess", res.tweet);
   } catch (error) {
     console.log(error);
   } finally {
@@ -25,4 +39,3 @@ const handleSubmitForm = async (data) => {
   }
 };
 </script>
-<style scoped></style>

@@ -1,4 +1,4 @@
-import { createUser } from "~/server/db/user";
+import { createUser, getUserByUsername } from "~/server/db/user";
 import { userTransformer } from "~/server/transformer/user";
 
 export default eventHandler(async (event) => {
@@ -17,6 +17,19 @@ export default eventHandler(async (event) => {
       createError({ statusCode: 400, statusMessage: "Password does not match" })
     );
   }
+
+  // Checking if user exists or not
+  let user = await getUserByUsername(username);
+  if (user) {
+    return sendError(
+      event,
+      createError({
+        statusCode: 400,
+        statusMessage: "Username already exist",
+      })
+    );
+  }
+
   const userData = {
     email,
     name,
@@ -25,7 +38,7 @@ export default eventHandler(async (event) => {
     profileImage: "https://picsum.photos/200/200",
   };
 
-  const user = await createUser(userData);
+  user = await createUser(userData);
 
   return {
     data: userTransformer(user),

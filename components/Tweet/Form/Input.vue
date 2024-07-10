@@ -12,7 +12,7 @@
         <input
           type="text"
           v-model="text"
-          placeholder="What is happening?!"
+          :placeholder="placeholder"
           class="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 text-black dark:text-white focus:outline-none focus:border-blue-500"
         />
         <!-- File selector  -->
@@ -76,6 +76,12 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  placeholder: {
+    type: String,
+  },
+});
+
 const imageInput = ref();
 const selectedImage = ref(null);
 const inputImageUrl = ref(null);
