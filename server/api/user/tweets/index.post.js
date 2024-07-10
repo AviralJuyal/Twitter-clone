@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
   const filePromises = Object.keys(response.files).map(async (key) => {
     const file = response.files[key];
 
+    //
     const res = await uploadImage(file[0].filepath);
 
     return createMediaFile({
