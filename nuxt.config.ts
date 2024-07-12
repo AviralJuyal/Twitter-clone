@@ -11,12 +11,13 @@ export default defineNuxtConfig({
         cacheGroups: {
           default: false,
           vendors: false,
-          // Define a custom cache group to bundle all composables and utils
+          // Custom cache group for composables and utils
           common: {
             test: /[\\/]composables[\\/]|[\\/]utils[\\/]/,
             name: 'common',
             chunks: 'all',
             enforce: true,
+            priority: 10,
           },
         },
       },
