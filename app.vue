@@ -67,6 +67,7 @@ onBeforeMount(async () => {
   }
 });
 
+//comment
 const handleToggleMode = (val) => {
   darkMode.value = !darkMode.value;
   console.log(val, "VALUE", darkMode.value);
