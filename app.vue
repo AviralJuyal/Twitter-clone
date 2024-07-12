@@ -45,6 +45,7 @@
 </template>
 
 <script setup>
+
 const darkMode = ref(false);
 
 const { useAuthUser, initAuth, useAuthLoading } = useAuth();
@@ -64,6 +65,12 @@ onBeforeMount(async () => {
       navigateTo({
         path: "/home",
       });
+  }
+  try {
+    
+    console.log(getOsName())
+  } catch (error) {
+    console.log(error);
   }
 });
 
