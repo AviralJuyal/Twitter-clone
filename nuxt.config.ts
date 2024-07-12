@@ -3,9 +3,24 @@ import {resolve} from "path"
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss"],
-  build:{
-    transpile:['@heroicons/vue']
-  },
+  build: {
+    transpile: ['@heroicons/vue'],
+    extractCSS: true,
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          // Define a custom cache group to bundle all composables and utils
+          common: {
+            test: /[\\/]composables[\\/]|[\\/]utils[\\/]/,
+            name: 'common',
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      },
+    },
   alias:{
     "@":resolve(__dirname,"/")
   },
