@@ -21,6 +21,11 @@ export default defineNuxtConfig({
         },
       },
     },
+    analyze: {
+      analyzerMode: 'static',
+      openAnalyzer: true, // Automatically open the analyzer in the browser
+    },
+  },
   alias:{
     "@":resolve(__dirname,"/")
   },
