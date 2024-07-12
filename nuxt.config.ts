@@ -4,27 +4,33 @@ import {resolve} from "path"
 export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss"],
   build: {
-    transpile: ['@heroicons/vue'],
-    extractCSS: true,
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          // Custom cache group for composables and utils
-          common: {
-            test: /[\\/]composables[\\/]|[\\/]utils[\\/]/,
-            name: 'common',
-            chunks: 'all',
-            enforce: true,
-            priority: 10,
+    analyze: true, // This is optional but helps to visualize your bundles
+    extend(config, { isDev, isClient }) {
+      if (isClient && !isDev) {
+        // Merge composables and utils into a single chunk
+        config.optimization.splitChunks = {
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendor',
+              chunks: 'all',
+              enforce: true,
+            },
+            commons: {
+              name: 'commons',
+              chunks: 'all',
+              minChunks: 2,
+            },
+            composablesUtils: {
+              name: 'composables-utils',
+              test: /[\\/]composables[\\/]|[\\/]utils[\\/]/,
+              chunks: 'all',
+              priority: 10,
+              enforce: true,
+            },
           },
-        },
-      },
-    },
-    analyze: {
-      analyzerMode: 'static',
-      openAnalyzer: true, // Automatically open the analyzer in the browser
+        };
+      }
     },
   },
   alias:{
